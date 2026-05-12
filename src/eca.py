@@ -1,5 +1,3 @@
-"""Efficient Channel Attention (ECA-Net, CVPR 2020)."""
-
 from __future__ import annotations
 
 import math
@@ -9,8 +7,6 @@ import torch.nn as nn
 
 
 class ECALayer(nn.Module):
-    """1D conv on globally pooled channels; adaptive kernel size from channel count."""
-
     def __init__(self, channels: int, gamma: float = 2.0, b: float = 1.0) -> None:
         super().__init__()
         t = int(abs((math.log2(max(channels, 2)) + b) / gamma))

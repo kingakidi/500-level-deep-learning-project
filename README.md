@@ -1,86 +1,58 @@
-# COEN543 Deep Learning Project — Topic 4
+# Deep Learning Project — ShuffleNetV2 on Dataset 3
 
-Topic 4: **ShuffleNetV2 pretrained model** finetuned on **Dataset 3** (10 classes), with:
-- **Model 1**: ShuffleNetV2 **x1.0** (transfer learning, partial freeze)
-- **Model 2**: ShuffleNetV2 **x0.5 + ECA** (lighter model with Efficient Channel Attention)
+This project fine-tunes **ShuffleNetV2** on **Dataset 3** (10-class tomato disease images). It trains two models: a **ShuffleNetV2 x1.0** baseline with ImageNet weights and partial freezing, and a lighter **ShuffleNetV2 x0.5** backbone with **ECA** (Efficient Channel Attention). Training saves validation metrics, checkpoints, and accuracy curves.
 
-This project trains both models, evaluates **accuracy / precision / recall / f1-score**, computes **FLOPs**, and saves **Accuracy vs Epochs** plots.
+## Setup
 
-## Folder layout (expected)
+1. Clone or copy this repository and open a terminal at the project root (the folder that contains `main.py` and `requirements.txt`).
 
-Your dataset must be in this structure:
-
-```
-deep-learning-project/
-  Dataset3/
-    train/
-      class_1/
-        *.jpg
-      class_2/
-        *.jpg
-      ...
-    val/
-      class_1/
-        *.jpg
-      class_2/
-        *.jpg
-      ...
-```
-
-## Installation
-
-From `E:\abu-projects\deep-learning-project`:
+2. Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-If you have both `python` and `pip` installed, that’s all you need.
+3. Place the image dataset under `Dataset3/` using the layout in **Folder layout** below.
 
-## Run training (Model 1 + Model 2)
+4. Start training (pick one):
 
-```bash
-python train_topic4.py --data-dir Dataset3 --models both --epochs 40 --batch-size 64
-```
-
-If your machine is slow (CPU-only), start with fewer epochs:
+Both models in one run:
 
 ```bash
-python train_topic4.py --data-dir Dataset3 --models both --epochs 1 --batch-size 64
+python main.py --data-dir Dataset3 --models both --epochs 80 --batch-size 64
 ```
 
-## Run only one model
-
-Model 1 only:
+Baseline only (ShuffleNetV2 x1.0):
 
 ```bash
-python train_topic4.py --data-dir Dataset3 --models 1 --epochs 40
+python main.py --data-dir Dataset3 --models 1 --epochs 80 --batch-size 64
 ```
 
-Model 2 only:
+ECA variant only (ShuffleNetV2 x0.5 + ECA):
 
 ```bash
-python train_topic4.py --data-dir Dataset3 --models 2 --epochs 40
+python main.py --data-dir Dataset3 --models 2 --epochs 80 --batch-size 64
 ```
 
-## Output files
+## Folder layout
 
-By default, outputs are saved to `outputs_topic4/`:
-- `model1_best.pt`, `model2_best.pt` (best checkpoints on validation accuracy)
-- `model1_metrics.json`, `model2_metrics.json` (metrics + training history)
-- `model1_accuracy_vs_epochs.png`, `model2_accuracy_vs_epochs.png`
-- `improvement_model2_vs_model1.json` (only when training `--models both`)
+**Dataset (required)**
 
-You can change the output directory:
-
-```bash
-python train_topic4.py --data-dir Dataset3 --out-dir outputs_topic4_run2
+```
+Dataset3/
+  train/<class_name>/*.jpg
+  val/<class_name>/*.jpg
 ```
 
-## Useful options
+Train and validation splits must use the same class folder names.
 
-- `--lr 3e-4` (learning rate)
-- `--image-size 224` (input image size)
-- `--num-workers 2` (data loading workers; set `0` if you get dataloader issues)
-- `--no-pretrained` (not recommended; disables ImageNet weights)
+**Code**
 
+- `main.py` — training entry point.
+- `src/` — model definitions (`models.py`, `eca.py`) and training pipeline (`experiment.py`).
+
+**Outputs**
+
+- `artifacts/` — default location for new runs (`--out-dir` defaults here). Checkpoints, JSON metrics, plots, and `comparison_eca_vs_baseline.json` when both models are trained.
+- `runs/dataset3_full_run/` — saved full benchmark runs (e.g. `model1_*`, `model2_*`, `improvement_model2_vs_model1.json`).
+- `runs/dataset3_quick_run/` — saved shorter test runs.

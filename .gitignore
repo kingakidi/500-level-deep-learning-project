@@ -1,7 +1,16 @@
-# Python caches
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+.Python
+
+# Packaging / install
+dist/
+build/
+*.egg-info/
+.eggs/
+*.egg
 
 # Virtual environments
 .venv/
@@ -11,26 +20,50 @@ ENV/
 # IDE / editor
 .vscode/
 .idea/
+*.swp
+*~
 
 # Jupyter
 .ipynb_checkpoints/
 
-# OS files
+# OS
 Thumbs.db
 Desktop.ini
 .DS_Store
 
-# Training artifacts / outputs
-outputs_topic4/
+# Training outputs (default + saved runs)
+artifacts/
+runs/
+
+# Model weights / exports
 **/*.pt
 **/*.pth
 **/*.onnx
+**/*.safetensors
 
-# Torch / HF caches (optional)
+# Logs
+*.log
+
+# Tests / coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Experiment trackers (if you add them later)
+wandb/
+mlruns/
+lightning_logs/
+
+# Caches
 .cache/
+.mypy_cache/
+.ruff_cache/
 
 # Secrets
 .env
 .env.*
 !.env.example
 
+# Local dataset (large images; remove this line if you intentionally commit Dataset3)
+Dataset3/

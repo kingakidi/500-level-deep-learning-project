@@ -1,1 +1,1 @@
-# COEN543 Topic 4 — ShuffleNetV2 on Dataset3
+"""ShuffleNetV2 fine-tuning models and training utilities for image classification."""
